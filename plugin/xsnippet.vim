@@ -41,6 +41,7 @@ FT_TO_LANGUAGE = {
     "perl": "Perl",
     "tex": "TeX",
     "vhdl": "VHDL",
+    "verilog": "Verilog",
     "nasm": "Nasm",
     "asm": "Gas",
 }
