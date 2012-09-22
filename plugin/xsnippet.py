@@ -1,36 +1,32 @@
 import urllib
 import urllib2
+import json
 
-APIURL = "http://www.xsnippet.org/new"
 
-def post_snippet(content,
-                 title="Untitled",
-                 author="Anonymous",
-                 language="Autodetection",
-                 tags=[]):
+def post_snippet(title, language, content):
     """
-    Post a text snippet to the www.xsnippet.org pastebin service
-
-    Arguments:
-        content  --- text content of the snippet (string)
-        title    --- a title of the snippet (string)
-        author   --- an author of the snippet (string)
-        language --- a programming language the snippet is written in (string)
-        tags     --- tags associated with the snippet (list of strings)
-
-    (note: all strings should be UTF-8 encoded)
-
-    Returns:
-        a string containing the url of the posted snippet
+        Send file to xsnippet.org and return link to last one.
+        Return "None" if error occured.
     """
 
-    params = {
-                 'title': title
-               , 'content': content
-               , 'author': author
-               , 'language': language
-               , 'tags': ','.join(tags)
-             }
+    POST_SNIPPET_URL = "http://xsnippet.org/api/v1/snippets/"
+    SHOW_SNIPPET_URL = "http://xsnippet.org/{id}/"
 
-    request = urllib2.urlopen(APIURL, data=urllib.urlencode(params))
-    return request.geturl()
+    if not content:
+        return None
+
+    data = {"content": content}
+
+    if title is not None:
+        data["title"] = title
+    if language is not None:
+        data["language"] = language
+
+    request = urllib2.Request(POST_SNIPPET_URL, urllib.urlencode(data))
+    response = urllib2.urlopen(request)
+
+    if response.getcode() == 201:
+        id = json.loads(response.read()).get("id")
+        return SHOW_SNIPPET_URL.format(id=id)
+
+    return None
