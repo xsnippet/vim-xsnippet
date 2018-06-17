@@ -1,15 +1,15 @@
 vim-xsnippet
 ============
 
-**vim-xsnippet** is a simple Vim_ plugin which enables one to post code
-snippets to the xsnippet.org_ pastebin service directly from Vim.
+**vim-xsnippet** is a simple Vim_ plugin that enables one to post code
+snippets to xsnippet.org_ pastebin service directly from Vim.
 
 
 Requirements
 ------------
 
-* Python 2.x
-* Vim 7.x built with ``+python`` option
+* Python 2.7+
+* Vim 7.x+ built with ``+python``
 
 
 Installation
@@ -17,23 +17,27 @@ Installation
 
 Copy all files to your ``$VIMRUNTIME`` dir (usually ``~/.vim``).
 
-    **Note:** if you use pathogen, copy all files to some
-    dir in your bundles path.
+Alternatively, if you are using Vundle_ plug-in manager for Vim_, add the
+following line to your ``.vimrc``::
 
-Using
+    Bundle 'xsnippet/vim-xsnippet'
+
+
+Usage
 -----
 
 ``:call PostToXsnippet()``
-    posts the content of the current buffer to xsnippet.org_
-    and puts the snippet's url to the clipboard
+    posts the content of the current buffer to xsnippet.org_ and puts the
+    snippet url to the clipboard
 
 Info
 ----
 
-* Author:   Roman Podolyaka (roman.podolyaka@gmail.com)
-* License:  GNU GPL v3
+* Authors:  The XSnippet Team (dev@xsnippet.org)
+* License:  MIT
 * Homepage: https://github.com/xsnippet/vim-xsnippet
 
 
-.. _xsnippet.org: http://www.xsnippet.org/
+.. _xsnippet.org: https://xsnippet.org/
 .. _Vim: http://www.vim.org/
+.. _Vundle: https://github.com/VundleVim/Vundle.vim

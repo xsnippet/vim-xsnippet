@@ -1,0 +1,18 @@
+dist: trusty
+language: python
+
+matrix:
+  include:
+    - python: 2.7
+    - python: 3.5
+    - python: 3.6
+
+install:
+  - pip install flake8 mock pytest
+
+script:
+  - flake8 plugin/ tests/
+  - PYTHONPATH="$(pwd)/plugin:$PYTHONPATH" pytest -s -v tests/
+
+notifications:
+  email: false

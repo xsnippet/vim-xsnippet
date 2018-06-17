@@ -6,52 +6,46 @@ python import sys
 exe 'python sys.path.insert(0, "' . s:plugin_path . '")'
 
 python << EOF
-import os
-
-import getpass
-
 import vim
 import xsnippet
 
 FT_TO_LANGUAGE = {
-    "c": "c",
-    "cpp": "cpp",
+    "c": "c_cpp",
+    "cpp": "c_cpp",
     "cs": "csharp",
     "java": "java",
     "python": "python",
-    "sh": "bash",
-    "html": "html+php",
+    "sh": "sh",
+    "html": "html",
     "xml": "xml",
     "css": "css",
     "javascript": "javascript",
     "php": "php",
     "sql": "sql",
     "ruby": "ruby",
-    "apache": "apache",
-    "cmake": "cmake",
+    "apache": "apache_conf",
     "diff": "diff",
     "django": "django",
-    "dosbatch": "bat",
+    "dosbatch": "batchfile",
     "erlang": "erlang",
     "haskell": "haskell",
     "dosini": "ini",
-    "lisp": "cl",
+    "lisp": "lisp",
     "lua": "lua",
-    "objc": "objc",
+    "objc": "objectivec",
     "perl": "perl",
-    "tex": "tex",
+    "tex": "latex",
     "vhdl": "vhdl",
-    "verilog": "v",
-    "nasm": "nasm",
-    "asm": "gas",
+    "verilog": "verilog",
+    "asm": "assembly_x86",
     "yaml": "yaml",
-    "vim": "vim"
+    "dockerfile": "dockerfile"
 }
 
 url = xsnippet.post_snippet(
     content='\n'.join(vim.current.buffer[:]),
     title=vim.eval("expand('%:t')"),
-    language=FT_TO_LANGUAGE.get(vim.eval("&ft"), "text")
+    syntax=FT_TO_LANGUAGE.get(vim.eval("&ft"), "text")
 )
 
 vim.command("let @+ = '%s'" % url)
