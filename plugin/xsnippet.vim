@@ -2,10 +2,10 @@ let s:plugin_path = escape(expand('<sfile>:p:h'), '\')
 
 function! PostToXsnippet()
 
-python import sys
-exe 'python sys.path.insert(0, "' . s:plugin_path . '")'
+pythonx import sys
+exe 'pyx sys.path.insert(0, "' . s:plugin_path . '")'
 
-python << EOF
+pythonx << EOF
 import vim
 import xsnippet
 

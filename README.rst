@@ -9,7 +9,7 @@ Requirements
 ------------
 
 * Python 2.7+
-* Vim 7.x+ built with ``+python``
+* Vim 7.x+ built with ``+python`` (or ``+python3``)
 
 
 Installation
