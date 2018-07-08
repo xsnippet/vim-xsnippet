@@ -1,32 +1,48 @@
-import urllib
-import urllib2
+import contextlib
 import json
+import os
+
+try:
+    # python 3
+    import http.client as http
+except ImportError:
+    # python 2
+    import httplib as http
 
 
-def post_snippet(title, language, content):
-    """
-        Send file to xsnippet.org and return link to last one.
-        Return "None" if error occured.
-    """
+API_URL = os.environ.get('XSNIPPET_API_URL', 'https://api.xsnippet.org')
+WEB_URL = os.environ.get('XSNIPPET_WEB_URL', 'https://xsnippet.org')
+TIMEOUT = int(os.environ.get('XSNIPPET_CONN_TIMEOUT', 10))
 
-    POST_SNIPPET_URL = "http://xsnippet.org/api/v1/snippets/"
-    SHOW_SNIPPET_URL = "http://xsnippet.org/{id}/"
 
+def post_snippet(title, syntax, content):
     if not content:
-        return None
+        raise ValueError('Can not post an empty snippet')
 
-    data = {"content": content}
+    if API_URL.startswith('https'):
+        conn = http.HTTPSConnection(API_URL.split('https://', 1)[-1], 443,
+                                    timeout=TIMEOUT)
+    else:
+        conn = http.HTTPConnection(API_URL.split('http://', 1)[-1], 80,
+                                   timeout=TIMEOUT)
 
-    if title is not None:
-        data["title"] = title
-    if language is not None:
-        data["language"] = language
+    with contextlib.closing(conn):
+        conn.request(
+            'POST', '/v1/snippets',
+            body=json.dumps({
+                'content': content,
+                'title': title,
+                'syntax': syntax
+            }),
+            headers={
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        )
 
-    request = urllib2.Request(POST_SNIPPET_URL, urllib.urlencode(data))
-    response = urllib2.urlopen(request)
+        response = conn.getresponse()
+        if response.status != http.CREATED:
+            raise ValueError('Failed to post a snippet')
 
-    if response.getcode() == 201:
-        id = json.loads(response.read()).get("id")
-        return SHOW_SNIPPET_URL.format(id=id)
-
-    return None
+        snippet_id = json.loads(response.read())['id']
+        return '%s/%s' % (WEB_URL, snippet_id)
